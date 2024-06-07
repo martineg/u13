@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, jsonify, abort
-from .extensions import db
+from .extensions import db, auth
 from .models import Link
 
 short = Blueprint('short', __name__, url_prefix='/short')
@@ -27,6 +27,7 @@ def add_link():
     return jsonify(error='url is missing'), 400
 
 @short.route('/stats')
+@auth.login_required(role='admin')
 def stats():
   stats = {l.original_url: l.visits for l in Link.query.all() }
   return jsonify(stats=stats)
