@@ -20,8 +20,9 @@ def add_link():
   data = request.get_json()
   if 'url' in data:
     link = Link(original_url=data['url'])
-    db.session.add(link)
-    db.session.commit()
+    if not Link.query.filter_by(original_url=data['url']).first():
+      db.session.add(link)
+      db.session.commit()
     return jsonify(url=link.original_url, short_url=link.short_url)
   else:
     return jsonify(error='url is missing'), 400
