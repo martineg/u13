@@ -13,6 +13,9 @@ class Link(db.Model):
     self.original_url = original_url
     self.short_url = self.generate_short_link()
 
+  def __repr__(self):
+    return f'<Link {self.short_url}'
+
   def generate_short_link(self):
     short_url = md5(self.original_url.encode())
     return short_url.hexdigest()[:7]
